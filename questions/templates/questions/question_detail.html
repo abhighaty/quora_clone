@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4 shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h2 class="mb-0">{{ object.title }}</h2>
+                {% if object.author == user %}
+                    <div>
+                        <a href="{% url 'question-update' object.id %}" class="btn btn-sm btn-light">Edit</a>
+                        <a href="{% url 'question-delete' object.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p class="card-text text-muted mb-3">
+                    <small>
+                        Posted by {{ object.author.username }} on {{ object.date_posted|date:"F d, Y" }}
+                    </small>
+                </p>
+                <p class="card-text">{{ object.content }}</p>
+            </div>
+        </div>
+        
+        <div class="card mb-4 shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Your Answer</h3>
+            </div>
+            <div class="card-body">
+                {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'post-answer' object.id %}">
+                        {% csrf_token %}
+                        {{ answer_form|crispy }}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary mt-3">Submit Answer</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <p>Please <a href="{% url 'login' %}">login</a> to post an answer.</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <h3 class="mb-3">{{ answers.count }} Answer{{ answers.count|pluralize }}</h3>
+        
+        {% for answer in answers %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <p class="card-text">{{ answer.content }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <small class="text-muted">
+                                Answered by {{ answer.author.username }} on {{ answer.date_posted|date:"F d, Y" }}
+                            </small>
+                        </div>
+                        <div>
+                            {% if user.is_authenticated %}
+                                <button 
+                                    class="btn btn-sm {% if user in answer.likes.all %}btn-primary{% else %}btn-outline-primary{% endif %} like-btn" 
+                                    data-answer-id="{{ answer.id }}"
+                                >
+                                    <i class="fa fa-thumbs-up"></i> 
+                                    <span class="like-count">{{ answer.likes.count }}</span>
+                                </button>
+                            {% else %}
+                                <button class="btn btn-sm btn-outline-primary" disabled>
+                                    <i class="fa fa-thumbs-up"></i> 
+                                    <span>{{ answer.likes.count }}</span>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-info">No answers yet. Be the first to answer!</div>
+        {% endfor %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Related Questions</h4>
+            </div>
+            <div class="card-body">
+                <p>Feature coming soon!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    $('.like-btn').click(function() {
+        const button = $(this);
+        const answerId = button.data('answer-id');
+        
+        $.ajax({
+            url: '{% url "like-answer" %}',
+            type: 'POST',
+            data: {
+                'answer_id': answerId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(data) {
+                if (data.liked) {
+                    button.removeClass('btn-outline-primary').addClass('btn-primary');
+                } else {
+                    button.removeClass('btn-primary').addClass('btn-outline-primary');
+                }
+                button.find('.like-count').text(data.count);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

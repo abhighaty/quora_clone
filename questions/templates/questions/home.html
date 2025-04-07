@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-4">Recent Questions</h1>
+        {% for question in questions %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <a href="{% url 'question-detail' question.id %}" class="text-decoration-none">{{ question.title }}</a>
+                    </h2>
+                    <p class="card-text text-muted">
+                        <small>
+                            Posted by {{ question.author.username }} on {{ question.date_posted|date:"F d, Y" }}
+                        </small>
+                    </p>
+                    <p class="card-text">{{ question.content|truncatewords:50 }}</p>
+                    <a href="{% url 'question-detail' question.id %}" class="btn btn-outline-primary">Read More</a>
+                    {% if question.answers.count > 0 %}
+                        <span class="badge bg-secondary ms-2">{{ question.answers.count }} Answers</span>
+                    {% else %}
+                        <span class="badge bg-light text-dark ms-2">No Answers Yet</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="alert alert-info">No questions found. Be the first to ask!</div>
+        {% endfor %}
+        
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Start Sharing Knowledge</h4>
+            </div>
+            <div class="card-body">
+                <p>Have a question? Ask the community and get answers from people who know.</p>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'question-create' %}" class="btn btn-primary">Ask a Question</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
