@@ -15,6 +15,7 @@ A Django-based Q&A platform inspired by Quora with user authentication, question
    git clone https://github.com/yourusername/quora-clone.git
    cd quora-clone
 2. **Create and activate a virtual environment**
+   
 -On Windows:
 ```
 python -m venv venv
