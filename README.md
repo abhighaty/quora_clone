@@ -19,6 +19,8 @@ A Django-based Q&A platform inspired by Quora with user authentication, question
 * On Windows:
 ```
 python -m venv venv
+```
+```
 venv\Scripts\activate
 ```
 * On MacOS/Linux:
@@ -49,7 +51,7 @@ python manage.py runserver
    * Open your browser and go to http://127.0.0.1:8000/
    * Admin interface is available at http://127.0.0.1:8000/admin/
 
-##Screenshots
+## Screenshots
   
 ### Home Page
 ![Home Page](screenshots/SS1.png)
