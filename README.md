@@ -46,11 +46,18 @@ python manage.py runserver
 7. **Access the application**
    * Open your browser and go to http://127.0.0.1:8000/
    * Admin interface is available at http://127.0.0.1:8000/admin/
-  
-   * ## Screenshots
 
+##Screenshots
+  
 ### Home Page
 ![Home Page](screenshots/SS1.png)
 
-
+### Question Page
+![Home Page](screenshots/SS2.png)
+### Answer Page
+![Home Page](screenshots/SS3.png)
+### Question Page
+![Home Page](screenshots/SS4.png)
+### Answer Page
+![Home Page](screenshots/SS5.png)
 
