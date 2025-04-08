@@ -53,11 +53,11 @@ python manage.py runserver
 ![Home Page](screenshots/SS1.png)
 
 ### Question Page
-![Home Page](screenshots/SS2.png)
+![Login Page](screenshots/SS2.png)
 ### Answer Page
-![Home Page](screenshots/SS3.png)
+![Ask question Page](screenshots/SS3.png)
 ### Question Page
-![Home Page](screenshots/SS4.png)
+![Answer Page](screenshots/SS4.png)
 ### Answer Page
-![Home Page](screenshots/SS5.png)
+![Edit view](screenshots/SS5.png)
 
