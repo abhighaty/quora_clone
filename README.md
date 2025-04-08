@@ -16,12 +16,12 @@ A Django-based Q&A platform inspired by Quora with user authentication, question
    cd quora-clone
 2. **Create and activate a virtual environment**
    
--On Windows:
+* On Windows:
 ```
 python -m venv venv
 venv\Scripts\activate
 ```
--On MacOS/Linux:
+* On MacOS/Linux:
 ```
 python -m venv venv
 source venv/bin/activate
